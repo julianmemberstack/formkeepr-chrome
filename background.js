@@ -1,4 +1,6 @@
 // background.js
+let isAuthTokenValid = false;  // Global variable to store the token validity
+
 async function verifyToken(token) {
     try {
         const response = await fetch('https://largest-walrus.vercel.app/api/authToken', {
@@ -7,25 +9,33 @@ async function verifyToken(token) {
             body: JSON.stringify({ token })
         });
 
-        // Check if the HTTP status code is 200 and content type is JSON
         if (response.ok && response.headers.get("content-type")?.includes("application/json")) {
             const data = await response.json();
             if (data.verified) {
                 console.log('Token is verified', data.data);
-                // Proceed with extension functionality
+                isAuthTokenValid = true;
             } else {
                 console.error('Token verification failed', data.error);
-                // Redirect to login or disable functionality
+                isAuthTokenValid = false;
             }
         } else {
-            // Handle non-JSON responses or errors not caught by the server
-            const errorMessage = await response.text(); // Assuming server might send non-JSON error message
+            const errorMessage = await response.text();
             console.error('Failed to verify token, server returned:', errorMessage);
+            isAuthTokenValid = false;
         }
     } catch (error) {
         console.error('Error verifying token:', error.message);
+        isAuthTokenValid = false;
     }
 }
+
+// background.js
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.checkAuth) {
+        sendResponse({authValid: isAuthTokenValid});
+        return true;  // Indicates an asynchronous response
+    }
+});
 
 // Example of getting the token from a cookie and verifying it
 chrome.cookies.get({url: "https://formkeepr-chrome.webflow.io", name: "authToken"}, function(cookie) {

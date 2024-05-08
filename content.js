@@ -1,3 +1,14 @@
+// content.js
+chrome.runtime.sendMessage({checkAuth: true}, response => {
+    if (response.authValid) {
+        console.log("Authentication token valid. Executing content script.");
+        // Code for modifying the DOM or other operations goes here
+    } else {
+        console.error("Authentication token not valid. Content script execution stopped.");
+        // Possibly remove some event listeners or clear data if needed
+    }
+});
+
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.action === "authStatus") {
         if (message.isVerified) {
