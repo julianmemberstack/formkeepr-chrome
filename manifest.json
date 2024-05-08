@@ -1,0 +1,40 @@
+{
+    "manifest_version": 3,
+    "name": "Formkeepr",
+    "version": "1.0",
+    "permissions": [
+      "storage",
+      "tabs",
+      "cookies"
+    ],
+    "host_permissions": [
+      "*://*/*",
+      "*://*.webflow.io/*",
+      "https://largest-walrus.vercel.app/*"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "icon.png"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"],
+        "run_at": "document_end"
+      }
+    ],
+    "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["PlusJakartaSans-VariableFont_wght.ttf", "icon.png", "node_modules/@memberstack/dom/dist/memberstack.dom.js"],
+            "matches": ["<all_urls>"]
+        }
+    ]
+    
+  }
+  

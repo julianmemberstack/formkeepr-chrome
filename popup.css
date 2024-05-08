@@ -1,0 +1,127 @@
+@font-face {
+    font-family: 'PlusJakartaSans';
+    src: url('PlusJakartaSans-VariableFont_wght.ttf') format('truetype');
+    font-weight: 200 800;
+    font-style: normal;
+}
+
+body {
+    font-family: 'PlusJakartaSans', sans-serif;
+    min-width: 400px; /* Sets the minimum width of the popup */
+    padding: 10px; /* Optional: Adds some padding for aesthetics */
+    box-sizing: border-box; /* Ensures padding does not affect the overall width calculation */
+    font-size: 100%;
+}
+
+.button {
+    padding: 10px 14px 10px 14px;
+    background-color: #305de1;
+    border-radius: 6px;
+    border-width: 0px;
+    color: white;
+    font-family: 'PlusJakartaSans', sans-serif;
+    transition: 200ms ease;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+
+.switch_wrapper {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.switch {
+    display: flex;
+    align-items: center;  /* Align items vertically in the middle */
+    margin-bottom: 10px;
+    gap: 10px;            /* Space between the switch and the label text */
+    transition: 200ms ease;
+}
+  
+/* Style for the actual switch control */
+.switch .slider {
+    position: relative;
+    display: inline-block;
+    width: 35px;
+    height: 22px;
+}
+
+/* Hidden input checkbox styling */
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+/* Slider styling */
+.slider {
+    cursor: pointer;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #8db600;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(13px);
+}  
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: whitesmoke;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+.mslogo {
+    width: 140px;
+}
+
+.header {
+   margin-bottom: 20px;
+}
+
+.logo {
+    width: 200px;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Formkeepr Control Panel</title>
+    <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body>
+    <div class="header">
+        <img class="logo" src="assets/formkeeprlogo.svg">
+    </div>
+    <div class="switch_wrapper">
+            <label class="switch">
+                <input type="checkbox" id="toggleAutosave">
+                <span class="slider round"></span>
+                Pause autosaving on all sites
+            </label>
+            <label class="switch" id="autosaveSiteWrap">
+                <input type="checkbox" id="toggleAutosaveSite">
+                <span class="slider round"></span>
+                Pause autosaving for this site
+            </label>
+    </div>
+    <button class="button" id="clearSiteDataBtn">Clear Data From This Site</button>
+    <div class="footer">
+        <div>Made by</div>
+        <a target="_blank" href="https://www.memberstack.com">
+            <img class ="mslogo" src="assets/mslogo.svg">
+        </a>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
