@@ -30,14 +30,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
 });
 
-// background.js
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.checkAuth) {
-        sendResponse({authValid: isAuthTokenValid});
-        return true;  // Indicates an asynchronous response
-    }
-});
-
 // Example of getting the token from a cookie and verifying it
 chrome.cookies.get({url: "https://formkeepr-chrome.webflow.io", name: "authToken"}, function(cookie) {
     if (cookie) {
