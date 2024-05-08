@@ -1,18 +1,4 @@
 // popup.js
-
-// Listening for messages from popup
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.type === 'verifyToken' && request.token) {
-        verifyToken(request.token).then(() => {
-            sendResponse({authValid: isAuthTokenValid});
-        }).catch(error => {
-            console.error('Error processing token verification:', error);
-            sendResponse({authValid: false});
-        });
-        return true;  // Keep the message channel open for the asynchronous response
-    }
-});
-
 document.addEventListener('DOMContentLoaded', function() {
     // Assuming you store the token in local storage or retrieve it from somewhere
     chrome.storage.local.get(['authToken'], function(result) {

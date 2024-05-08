@@ -1,6 +1,4 @@
 // background.js
-let isAuthTokenValid = false;
-
 async function verifyToken(token) {
     try {
         const response = await fetch('https://largest-walrus.vercel.app/api/authToken', {
@@ -11,19 +9,26 @@ async function verifyToken(token) {
 
         if (response.ok && response.headers.get("content-type")?.includes("application/json")) {
             const data = await response.json();
-            isAuthTokenValid = data.verified;  // Update the global state based on verification result
-            console.log(data.verified ? 'Token is verified' : 'Token verification failed', data);
+            return data.verified;  // Returns true if verified, false otherwise
         } else {
-            const errorMessage = await response.text();
-            console.error('Failed to verify token, server returned:', errorMessage);
-            isAuthTokenValid = false;
+            console.error('Failed to verify token, server response not OK or not JSON.');
+            return false;
         }
     } catch (error) {
-        console.error('Error verifying token:', error);
-        isAuthTokenValid = false;
+        console.error('Error verifying token:', error.message);
+        return false;
     }
 }
 
+// Message listener for real-time verification request
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.verifyTokenNow) {
+        verifyToken(request.token).then(verified => {
+            sendResponse({authValid: verified});
+        });
+        return true;  // Indicates an asynchronous response
+    }
+});
 
 // background.js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {

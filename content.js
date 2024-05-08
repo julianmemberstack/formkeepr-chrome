@@ -171,37 +171,47 @@ function showNotification(message, duration = 5000) {
 }
 
 // Prefill form data
-function prefillAllFormData() {
-    const forms = document.querySelectorAll('form');
-    let formDataRestored = false; // Track if any data was restored
+function prefillFormData() {
+    // Assume the token is stored or retrieved from somewhere in the extension
+    const userToken = getTokenFromStorage();  // Implement this function based on your storage strategy
 
-    forms.forEach(form => {
-        const formId = `${window.location.hostname}_${form.name || form.id}`;
-        const savedData = localStorage.getItem(formId);
-        if (savedData) {
-            const formData = JSON.parse(savedData);
-            Array.from(form.elements).forEach(element => {
-                if (element.type === "checkbox") {
-                    if (formData[element.name] === "on" !== element.checked) {
-                        element.click(); // Trigger click for visual update on custom styled checkboxes
-                        element.dispatchEvent(new Event('change'));
-                    }
-                } else if (element.type === "radio") {
-                    if (formData[element.name] === element.value && !element.checked) {
-                        element.click(); // Trigger click for visual update on custom styled radios
-                        element.dispatchEvent(new Event('change'));
-                    }
-                } else if (element.name && formData[element.name] !== undefined) {
-                    element.value = formData[element.name];
-                    formDataRestored = true;
+    chrome.runtime.sendMessage({verifyTokenNow: true, token: userToken}, response => {
+        if (response.authValid) {
+            console.log("Token validated, pre-filling form data.");
+            const forms = document.querySelectorAll('form');
+            let formDataRestored = false; // Track if any data was restored
+        
+            forms.forEach(form => {
+                const formId = `${window.location.hostname}_${form.name || form.id}`;
+                const savedData = localStorage.getItem(formId);
+                if (savedData) {
+                    const formData = JSON.parse(savedData);
+                    Array.from(form.elements).forEach(element => {
+                        if (element.type === "checkbox") {
+                            if (formData[element.name] === "on" !== element.checked) {
+                                element.click(); // Trigger click for visual update on custom styled checkboxes
+                                element.dispatchEvent(new Event('change'));
+                            }
+                        } else if (element.type === "radio") {
+                            if (formData[element.name] === element.value && !element.checked) {
+                                element.click(); // Trigger click for visual update on custom styled radios
+                                element.dispatchEvent(new Event('change'));
+                            }
+                        } else if (element.name && formData[element.name] !== undefined) {
+                            element.value = formData[element.name];
+                            formDataRestored = true;
+                        }
+                    });
                 }
             });
+        
+            if (formDataRestored) {
+                showNotification("Form inputs restored! Please review everything before submitting.");
+            }
+        } else {
+            console.error("Token validation failed, cannot pre-fill form data.");
         }
     });
-
-    if (formDataRestored) {
-        showNotification("Form inputs restored! Please review everything before submitting.");
-    }
 }
 
 // Change event
