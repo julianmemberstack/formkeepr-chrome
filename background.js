@@ -1,5 +1,5 @@
 // background.js
-let isAuthTokenValid = false;  // Global variable to store the token validity
+let isAuthTokenValid = false;
 
 async function verifyToken(token) {
     try {
@@ -11,23 +11,19 @@ async function verifyToken(token) {
 
         if (response.ok && response.headers.get("content-type")?.includes("application/json")) {
             const data = await response.json();
-            if (data.verified) {
-                console.log('Token is verified', data.data);
-                isAuthTokenValid = true;
-            } else {
-                console.error('Token verification failed', data.error);
-                isAuthTokenValid = false;
-            }
+            isAuthTokenValid = data.verified;  // Update the global state based on verification result
+            console.log(data.verified ? 'Token is verified' : 'Token verification failed', data);
         } else {
             const errorMessage = await response.text();
             console.error('Failed to verify token, server returned:', errorMessage);
             isAuthTokenValid = false;
         }
     } catch (error) {
-        console.error('Error verifying token:', error.message);
+        console.error('Error verifying token:', error);
         isAuthTokenValid = false;
     }
 }
+
 
 // background.js
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
